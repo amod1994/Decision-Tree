@@ -34,11 +34,12 @@ public class Util {
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 		}
-		return freq;
+		return freq;//minSup(min_Sup, freq);
+				
 	}
 
 	//READ CSV FILE STORE TUPLES INTO DATABASE
-	public static ArrayList<Attribute> readCSV(HashMap<String, Integer> freq, String filePath) {
+	public static ArrayList<Attribute> readCSV(HashMap<String, Integer> freq, String filePath, int min_Sup) {
 		
 		Scanner in;
 		ArrayList<Attribute> dataset = new ArrayList<Attribute>();
@@ -66,8 +67,9 @@ public class Util {
 				sortedTuple = orderElement(tuple);
 				
 				for(int j = sortedTuple.size()-1; j >= 0; j--)
-					dataset.get(lenOfDS).nodes.add(sortedTuple.get(j).getKey());
-				
+					if(checkMinSup(min_Sup, sortedTuple.get(j).getValue())) {
+						dataset.get(lenOfDS).nodes.add(sortedTuple.get(j).getKey());
+					}	
 				lenOfDS++;
 				tuple.clear();
 			}
@@ -76,6 +78,11 @@ public class Util {
 		}
 		
 		return dataset;
+	}
+	
+	//CHECK MINIMUN SUPPORT
+	public static boolean checkMinSup(int minSup, int node) {
+		return node > minSup ? true : false;
 	}
 	
 	//SORT HASHMAP BASED ON VALUE
@@ -89,7 +96,19 @@ public class Util {
 		});
 		return list;
 	}
-	
+
+	//REMOVE ELEMENTS WHICH DO NOT HAVE MINIMUM SUPPORT
+	public static HashMap<String, Integer> minSup(int min_Sup, HashMap<String, Integer> freq) {
+		Iterator<Integer> it = freq.values().iterator();
+			//freq.valuesSet().iterator();
+			while (it.hasNext()){
+			      Integer item = it.next();
+			      if(item < min_Sup)
+			    	  it.remove();
+			}
+			return freq;
+		}
+
 	//DISPLAY DATABASE
 	public static void display(ArrayList<Attribute> list) {
 		
@@ -99,5 +118,22 @@ public class Util {
 			}
 			System.out.println();
 		}
+	}
+
+	//DISPLAY PATTERN EXTRACTED
+	public static void displayPatt(HashMap<String, String> pattern) {
+		for (String name: pattern.keySet()){
+            String key =name.toString();
+            String value = pattern.get(name).toString();  
+            System.out.println(key + " " + value);
+		} 
+	}
+
+	public static void displayfreq(HashMap<String, Integer> freq) {
+		for (String name: freq.keySet()){
+            String key =name.toString();
+            Integer value = freq.get(name);  
+            System.out.println(key + " " + value);
+		} 
 	}
 }
