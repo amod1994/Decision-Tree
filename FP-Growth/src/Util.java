@@ -121,13 +121,13 @@ public class Util {
 	}
 
 	//DISPLAY PATTERN EXTRACTED
-	public static void displayPatt(HashMap<String, String> pattern) {
+	/*public static void displayPatt(HashMap<String, String> pattern) {
 		for (String name: pattern.keySet()){
-            String key =name.toString();
+            String key = name.toString();
             String value = pattern.get(name).toString();  
-            System.out.println(key + " " + value);
+            System.out.println(key + ":" + value);
 		} 
-	}
+	}*/
 
 	public static void displayfreq(HashMap<String, Integer> freq) {
 		for (String name: freq.keySet()){
@@ -136,4 +136,20 @@ public class Util {
             System.out.println(key + " " + value);
 		} 
 	}
+	
+	public static void displayPatt(HashMap<String, List<AllPattern>> result) {
+		
+		for(String node : result.keySet()) {
+			System.out.println("All Pattern of Node: " + node);
+			for(int i = 0; i < result.get(node).size(); i++) {
+				System.out.print("Pattern " + i + ":");
+				for(String str : result.get(node).get(i).pattern) {
+					System.out.print(str+"\t");
+				}
+				System.out.println();
+			}System.out.println();
+		}
+		
+	}
+	
 }

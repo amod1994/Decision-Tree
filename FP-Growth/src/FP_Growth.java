@@ -5,14 +5,13 @@ public class FP_Growth {
 	public static void main(String[] args) {
 		
 		final String filePath = "D:\\SEM-II\\Learning Systems-ESE589-Doboli\\Project 2\\self.csv";
-		final int minSup = 0;
-		HashMap<String, String> pattern;
+		final int minSup = 700;
+		HashMap<String, List<AllPattern>> pattern;
 		Model model;
 		
 		//COUNT FREQUENCY OF EACH ELEMENT
 		HashMap<String, Integer> freq = Util.calFreq(filePath);
-		Util.displayfreq(freq);
-		
+		//Util.displayfreq(freq);
 		
 		//STORE VALUES IN DATASET AFTER SORTING THEM ACCORDING TO FREQUENCY ------IF NUMBER GRETERE THAN MINSUP---------
 		ArrayList<Attribute> dataset = Util.readCSV(freq, filePath, minSup);
@@ -23,6 +22,7 @@ public class FP_Growth {
 		//CONTAINS COMPLETE FP_TREE AND HEADER TABLE
 		model = constructFPTree.parseTree();
 		
+		//FP GROWTH ALGORITHM
 		Algorithm fpGrowth = new Algorithm(model.root, model.header);
 		pattern = fpGrowth.fpGrowth();
 		
@@ -34,3 +34,5 @@ public class FP_Growth {
 	}
 
 }
+
+//TODO: HEADER SORTED/ UNSORTED
