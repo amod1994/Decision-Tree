@@ -5,8 +5,9 @@ public class FP_Growth {
 	public static void main(String[] args) {
 		
 		final String filePath = "D:\\SEM-II\\Learning Systems-ESE589-Doboli\\Project 2\\self.csv";
-		final int minSup = 700;
-		HashMap<String, List<AllPattern>> pattern;
+		final int minSup = 1;
+		final int minSupPatt = 1;
+		ArrayList<Result> pattern;
 		Model model;
 		
 		//COUNT FREQUENCY OF EACH ELEMENT
@@ -21,10 +22,11 @@ public class FP_Growth {
 		
 		//CONTAINS COMPLETE FP_TREE AND HEADER TABLE
 		model = constructFPTree.parseTree();
+		//Util.displayTree(model.root);
 		
 		//FP GROWTH ALGORITHM
 		Algorithm fpGrowth = new Algorithm(model.root, model.header);
-		pattern = fpGrowth.fpGrowth();
+		pattern = fpGrowth.fpGrowth(minSupPatt);
 		
 		//PRINT PATTERN
 		Util.displayPatt(pattern);
@@ -32,7 +34,6 @@ public class FP_Growth {
 		//PRINT SORTED DATASET
 		//Util.display(dataset);
 	}
-
 }
 
 //TODO: HEADER SORTED/ UNSORTED

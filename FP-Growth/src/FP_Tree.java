@@ -16,7 +16,7 @@ public class FP_Tree {
 				//System.out.println(dataset.get(i).nodes);
 				insertNode(dataset.get(i).nodes, root, header);
 		}
-		System.out.println("Done");
+		//System.out.println("Done");
 		return new Model(root, header);
 	}
 	

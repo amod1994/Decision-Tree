@@ -111,10 +111,12 @@ public class Util {
 
 	//DISPLAY DATABASE
 	public static void display(ArrayList<Attribute> list) {
-		
+		System.out.println("Frequency Based Sorted Database");
+		System.out.println();
 		for(int i = 0; i < list.size(); i++) {
 			for(int j = 0; j < list.get(i).nodes.size(); j++) {
-				System.out.print(list.get(i).nodes.get(j) + "  ");
+				String str = list.get(i).nodes.get(j);
+				System.out.print(str.substring(0, str.length() - 4) + "  ");
 			}
 			System.out.println();
 		}
@@ -137,19 +139,34 @@ public class Util {
 		} 
 	}
 	
-	public static void displayPatt(HashMap<String, List<AllPattern>> result) {
+	public static void displayPatt(ArrayList<Result> result) {
 		
-		for(String node : result.keySet()) {
-			System.out.println("All Pattern of Node: " + node);
-			for(int i = 0; i < result.get(node).size(); i++) {
-				System.out.print("Pattern " + i + ":");
-				for(String str : result.get(node).get(i).pattern) {
-					System.out.print(str+"\t");
-				}
-				System.out.println();
-			}System.out.println();
+		for(Result node : result) {
+			System.out.println("Pattern for node: " + node.name);
+			for(String str : node.pattern) {
+				System.out.print(str + "-->");
+			}
+			System.out.println();
+			//System.out.println();
 		}
-		
 	}
 	
+	public static void displayTree(Node root) {
+		Queue<Node> parents = new LinkedList<Node>();
+		parents.add(root);
+		while (!parents.isEmpty()) {
+			Queue<Node> children = new LinkedList<Node>();
+			for (Node node : parents) {
+				System.out.print(node.name + ":" + node.count);
+				for (Node childNode : node.childern) {
+					children.add(childNode);
+					System.out.print("\t");
+				}
+				if (node.childern.isEmpty())
+					System.out.print("\t");
+			}
+			System.out.println();
+			parents = children;
+		}
+	}
 }
