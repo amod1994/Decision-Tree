@@ -14,7 +14,6 @@ public class Util {
 		try {
 			
 			in = new Scanner(new File(filePath));
-			
 			//TODO: IF FIRST ROW IS INFORMATION
 			//String str = in.next();
 		
@@ -116,7 +115,8 @@ public class Util {
 		for(int i = 0; i < list.size(); i++) {
 			for(int j = 0; j < list.get(i).nodes.size(); j++) {
 				String str = list.get(i).nodes.get(j);
-				System.out.print(str.substring(0, str.length() - 4) + "  ");
+				//.substring(0, str.length() - 4) 
+				System.out.print(str+ "  ");
 			}
 			System.out.println();
 		}
@@ -169,4 +169,6 @@ public class Util {
 			parents = children;
 		}
 	}
+	
+	
 }

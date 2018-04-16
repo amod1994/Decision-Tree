@@ -1,20 +1,31 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class Algorithm {
 	HashMap<String, Links> header;
 	Node root;
+	HashMap<String, Integer> freq;
 	
-	Algorithm(Node root, HashMap<String, Links> header){
+	Algorithm(Node root, HashMap<String, Links> header, HashMap<String, Integer> freq){
 		this.header = header;
 		this.root = root;
+		this.freq = freq;
 	}
+	
+	//List<Entry<String, Integer>> sorted = Util.orderElement(freq);
 	
 	public ArrayList<Result> fpGrowth(int min_sup) {		
 		HashMap<String, List<AllPattern>> result = new HashMap<>();
 		
 		for(String str : header.keySet()) {
+		//for(int j = 0; j < sorted.size(); j++) {
+			
+			//String str = sorted.get(j).getKey();
+			//sorted.get(j).getKey()
+			
+			//sorted.get(j).getKey()
 			List<Node> link1 = header.get(str).link;
 			
 			AllPattern ap = new AllPattern();
@@ -56,12 +67,14 @@ public class Algorithm {
 				}
 			}
 			Result patt = new Result();
-			patt.name = node.substring(0, node.length() - 4);;
+			//.substring(0, node.length() - 4);
+			patt.name = node;
 			
 			for(int i = 0; i < result.get(node).size(); i++) {
 				for(String str : result.get(node).get(i).pattern) {
 					if(freq.get(str) >= min_sup) {
-						patt.pattern.add(str.substring(0, str.length() - 4));
+						//.substring(0, str.length() - 4)
+						patt.pattern.add(str);
 					}
 				}
 			}

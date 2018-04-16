@@ -25,7 +25,7 @@ public class FP_Growth {
 		//Util.displayTree(model.root);
 		
 		//FP GROWTH ALGORITHM
-		Algorithm fpGrowth = new Algorithm(model.root, model.header);
+		Algorithm fpGrowth = new Algorithm(model.root, model.header, freq);
 		pattern = fpGrowth.fpGrowth(minSupPatt);
 		
 		//PRINT PATTERN
@@ -37,3 +37,5 @@ public class FP_Growth {
 }
 
 //TODO: HEADER SORTED/ UNSORTED
+//TODO: MIN-SUP VARYING
+//TODO: MEMORY AND TIME AND PC
