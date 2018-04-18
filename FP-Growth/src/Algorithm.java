@@ -7,48 +7,50 @@ public class Algorithm {
 	HashMap<String, Links> header;
 	Node root;
 	HashMap<String, Integer> freq;
+	List<Entry<String, Integer>> sorted;
 	
 	Algorithm(Node root, HashMap<String, Links> header, HashMap<String, Integer> freq){
 		this.header = header;
 		this.root = root;
 		this.freq = freq;
+		//this.sorted = Util.orderElement(freq);
 	}
 	
-	//List<Entry<String, Integer>> sorted = Util.orderElement(freq);
-	
 	public ArrayList<Result> fpGrowth(int min_sup) {		
+		sorted = Util.orderElement(freq);
 		HashMap<String, List<AllPattern>> result = new HashMap<>();
 		
-		for(String str : header.keySet()) {
-		//for(int j = 0; j < sorted.size(); j++) {
-			
-			//String str = sorted.get(j).getKey();
+//		for(String str : header.keySet()) {							//UNSORTED HEADER
+//		for(int j = 0; j < sorted.size(); j++) {					//ASCENDING ORDER
+		for(int j = sorted.size()-1; j >= 0; j--) {					//DESCENDING ORDER
+			String str = sorted.get(j).getKey();
 			//sorted.get(j).getKey()
 			
-			//sorted.get(j).getKey()
-			List<Node> link1 = header.get(str).link;
+			if(header.get(str) != null) {
+				List<Node> link1 = header.get(str).link;
+
+				AllPattern ap = new AllPattern();
 			
-			AllPattern ap = new AllPattern();
-			
-			List<AllPattern> sdf = new ArrayList<AllPattern>();
-			for(int i = 0; i < link1.size(); i++)
-			{	
-				Node current = link1.get(i);
-				ap.cnt = current.count;
+				List<AllPattern> sdf = new ArrayList<AllPattern>();
+				for(int i = 0; i < link1.size(); i++)
+					{	
+						Node current = link1.get(i);
+						ap.cnt = current.count;
 				
-				AllPattern asd = new AllPattern();
-				asd.cnt = current.count;
-				while(current.parent != null) {
-					if(current.parent == root) {
-						break;
-					}else {
-						asd.pattern.add(current.parent.name);
-						current = current.parent;
+						AllPattern asd = new AllPattern();
+						asd.cnt = current.count;
+						while(current.parent != null) {
+								if(current.parent == root) {
+									break;
+								}else {
+										asd.pattern.add(current.parent.name);
+										current = current.parent;
+								}
+						}
+						sdf.add(asd);
 					}
-				}
-				sdf.add(asd);
-			}
 			result.put(str, sdf);
+			}
 		}
 		return minSupPattern(result, min_sup);
 	}

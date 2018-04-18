@@ -5,24 +5,30 @@ import java.util.Map.Entry;
 
 
 public class Util {
+	static Scanner in;
 	
-	//CALCULATE FREQUECY OF EACH ELEMENT
-	public static HashMap<String, Integer> calFreq(String filePath) {
-		Scanner in;
+	
+	public static boolean ifTransactional() {																	//CHECK IF SOFTWARE IF TRANSCTIONAL
+		System.out.println("Is Database Transactional? (Y/N)");
+		in = new Scanner(System.in);
+		String dbType = in.nextLine();
+		if(dbType.equalsIgnoreCase("N"))
+			return false;
+		return true;
+	}
+	
+	public static HashMap<String, Integer> calFreq(String filePath) {											//CALCULATE FREQUECY OF EACH ELEMENT FOR NON-TRANSACTIONAL DATASET
+		
 		HashMap<String, Integer> freq = new HashMap<String, Integer>();
 		
 		try {
 			
 			in = new Scanner(new File(filePath));
-			//TODO: IF FIRST ROW IS INFORMATION
-			//String str = in.next();
-		
 			while(in.hasNext()) {
 				String[] strAttrs = in.next().split(",");
 				for (int i = 0; i < strAttrs.length; i++) {
-					if (!strAttrs[i].isEmpty()){
-						//MAKE EACH ELEMENT UNIQUE
-						strAttrs[i] = strAttrs[i].concat("col") + i;
+					if (!strAttrs[i].isEmpty() && !strAttrs[i].equals("~")){
+						strAttrs[i] = strAttrs[i].concat("col") + i;           					//MAKE EACH ATTRIBUTE UNIQUE
 						if(freq.containsKey(strAttrs[i])) {
 							freq.put(strAttrs[i], freq.get(strAttrs[i])+1);
 						}else 
@@ -33,12 +39,10 @@ public class Util {
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 		}
-		return freq;//minSup(min_Sup, freq);
-				
+		return freq;			
 	}
 
-	//READ CSV FILE STORE TUPLES INTO DATABASE
-	public static ArrayList<Attribute> readCSV(HashMap<String, Integer> freq, String filePath, int min_Sup) {
+	public static ArrayList<Attribute> readCSV(HashMap<String, Integer> freq, String filePath, int min_Sup) {	//READ CSV FILE STORE TUPLES INTO DATABASE
 		
 		Scanner in;
 		ArrayList<Attribute> dataset = new ArrayList<Attribute>();
@@ -58,14 +62,15 @@ public class Util {
 				dataset.add(new Attribute());
 				String[] strAttrs = in.next().split(",");
 				for (int i = 0; i < strAttrs.length; i++) {
-					if (!strAttrs[i].isEmpty()){
+					if (!strAttrs[i].isEmpty() && !strAttrs[i].equals("~")){
 						strAttrs[i] = strAttrs[i].concat("col") + i; 
 						tuple.put(strAttrs[i], freq.get(strAttrs[i]));
 					}
 				}
 				sortedTuple = orderElement(tuple);
 				
-				for(int j = sortedTuple.size()-1; j >= 0; j--)
+				//for(int j = sortedTuple.size()-1; j >= 0; j--)            //DATASET SORTED IN ASCENDING ORDER
+				for(int j = 0; j < sortedTuple.size(); j++)
 					if(checkMinSup(min_Sup, sortedTuple.get(j).getValue())) {
 						dataset.get(lenOfDS).nodes.add(sortedTuple.get(j).getKey());
 					}	
@@ -79,13 +84,11 @@ public class Util {
 		return dataset;
 	}
 	
-	//CHECK MINIMUN SUPPORT
-	public static boolean checkMinSup(int minSup, int node) {
+	public static boolean checkMinSup(int minSup, int node) {													//CHECK MINIMUN SUPPORT
 		return node > minSup ? true : false;
 	}
 	
-	//SORT HASHMAP BASED ON VALUE
-	public static List<Entry<String, Integer>> orderElement(HashMap<String, Integer> tuple) {
+	public static List<Entry<String, Integer>> orderElement(HashMap<String, Integer> tuple) {					//SORT HASHMAP BASED ON VALUE
 		List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(tuple.entrySet());
 		Collections.sort(list, new Comparator<Entry<String, Integer>>(){
 			@Override
@@ -96,8 +99,7 @@ public class Util {
 		return list;
 	}
 
-	//REMOVE ELEMENTS WHICH DO NOT HAVE MINIMUM SUPPORT
-	public static HashMap<String, Integer> minSup(int min_Sup, HashMap<String, Integer> freq) {
+	public static HashMap<String, Integer> minSup(int min_Sup, HashMap<String, Integer> freq) {					//REMOVE ELEMENTS WHICH DO NOT HAVE MINIMUM SUPPORT
 		Iterator<Integer> it = freq.values().iterator();
 			//freq.valuesSet().iterator();
 			while (it.hasNext()){
@@ -108,8 +110,7 @@ public class Util {
 			return freq;
 		}
 
-	//DISPLAY DATABASE
-	public static void display(ArrayList<Attribute> list) {
+	public static void display(ArrayList<Attribute> list) {														//DISPLAY DATABASE
 		System.out.println("Frequency Based Sorted Database");
 		System.out.println();
 		for(int i = 0; i < list.size(); i++) {
@@ -121,17 +122,8 @@ public class Util {
 			System.out.println();
 		}
 	}
-
-	//DISPLAY PATTERN EXTRACTED
-	/*public static void displayPatt(HashMap<String, String> pattern) {
-		for (String name: pattern.keySet()){
-            String key = name.toString();
-            String value = pattern.get(name).toString();  
-            System.out.println(key + ":" + value);
-		} 
-	}*/
-
-	public static void displayfreq(HashMap<String, Integer> freq) {
+	
+	public static void displayfreq(HashMap<String, Integer> freq) {												//DISPLAY FREQUENCY OF EACH NODE
 		for (String name: freq.keySet()){
             String key =name.toString();
             Integer value = freq.get(name);  
@@ -139,7 +131,7 @@ public class Util {
 		} 
 	}
 	
-	public static void displayPatt(ArrayList<Result> result) {
+	public static void displayPatt(ArrayList<Result> result) {													//DISPLAY PATTERN
 		
 		for(Result node : result) {
 			System.out.println("Pattern for node: " + node.name);
@@ -151,7 +143,7 @@ public class Util {
 		}
 	}
 	
-	public static void displayTree(Node root) {
+	public static void displayTree(Node root) {																	//DISPLAY TREE
 		Queue<Node> parents = new LinkedList<Node>();
 		parents.add(root);
 		while (!parents.isEmpty()) {
