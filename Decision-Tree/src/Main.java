@@ -20,7 +20,7 @@ public class Main {
 		}
 		Node root = buildTree(dataset, attrList);
 
-		//Util.printTree(root);
+		Util.printTree(root);
 
 		/*List<String[]> validationData = new ArrayList();
 		for (String[] strings : validationData) {
@@ -55,13 +55,16 @@ public class Main {
 			return new Node(dataset.majorityClass);
 		}
 		
-		//curr = ID3.AttributeSelector(dataset, attrList);
+		curr = ID3.AttributeSelector(dataset, attrList);
 		//curr = C45.AttributeSelector(dataset, attrList);
-		curr = CART.AttributeSelector(dataset, attrList);
+		//curr = CART.AttributeSelector(dataset, attrList);
 		
 		/*make condition here-> moved to attrSelection*/
 		//attrList.remove(Integer.valueOf(curr.attr));
 
+		if(curr.attr == -1)
+			return new Node(dataset.majorityClass);
+		
 		for (BranchDecision branch : curr.branches) {
 			if (branch.partitionedDataSet.data.isEmpty()) {
 				return new Node(dataset.majorityClass);

@@ -1,8 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Util {
 	
@@ -72,7 +77,7 @@ public class Util {
 			while (!list.isEmpty()) {
 				Node cur = list.remove();
 				for (BranchDecision branch : cur.branches) {
-					System.out.print(" B:" + branch.equalTo + "->");
+					System.out.print(" B:" + (null != branch.equalTo ? branch.equalTo : branch.attrSet) + "->");
 					if(branch.resultant.attr != -1) {
 						System.out.print(" A:" +branch.resultant.attr);
 						list.add(branch.resultant);
@@ -90,4 +95,54 @@ public class Util {
 				}
 			}
 		}
+
+		public static <T> Set<Set<T>> combinations(List<T> groupSize, int k) {
+
+		    Set<Set<T>> allCombos = new HashSet<Set<T>> ();
+		    // base cases for recursion
+		    if (k == 0) {
+		        // There is only one combination of size 0, the empty team.
+		        allCombos.add(new HashSet<T>());
+		        return allCombos;
+		    }
+		    if (k > groupSize.size()) {
+		        // There can be no teams with size larger than the group size,
+		        // so return allCombos without putting any teams in it.
+		        return allCombos;
+		    }
+
+		    // Create a copy of the group with one item removed.
+		    List<T> groupWithoutX = new ArrayList<T> (groupSize);
+		    T x = groupWithoutX.remove(groupWithoutX.size()-1);
+
+		    Set<Set<T>> combosWithoutX = combinations(groupWithoutX, k);
+		    Set<Set<T>> combosWithX = combinations(groupWithoutX, k-1);
+		    for (Set<T> combo : combosWithX) {
+		        combo.add(x);
+		    }
+		    allCombos.addAll(combosWithoutX);
+		    allCombos.addAll(combosWithX);
+		    return allCombos;
+		}
+
+		public static DataSet combineDataSet(Set<String> combination, Map<String, DataSet> djs) {
+			DataSet dataset = new DataSet();
+			for (String key : combination) {
+				dataset.data.addAll(djs.get(key).data);
+				for (Map.Entry<String, Double> entry : djs.get(key).classes.entrySet()) {
+					if(!dataset.classes.containsKey(entry.getKey())) {
+						dataset.classes.put(entry.getKey(), entry.getValue());
+						if (null == dataset.majorityClass) {
+							dataset.majorityClass = entry.getKey();
+						}
+					} else
+						dataset.classes.put(entry.getKey(), dataset.classes.get(entry.getKey()) + entry.getValue());
+					if (dataset.classes.get(dataset.majorityClass) < dataset.classes.get(entry.getKey())) {
+						dataset.majorityClass = entry.getKey();
+					}
+				}
+			}
+			return dataset;
+		}
+		
 }

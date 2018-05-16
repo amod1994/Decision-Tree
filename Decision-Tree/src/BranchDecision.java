@@ -1,9 +1,10 @@
 import java.util.List;
+import java.util.Set;
 
 public class BranchDecision {
 
 	String equalTo;
-	//List<String> list;
+	Set<String> attrSet;
 	//Double lessEqTo;
 	DataSet partitionedDataSet;
 	Node resultant;
