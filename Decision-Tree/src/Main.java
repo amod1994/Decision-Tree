@@ -5,11 +5,12 @@ import java.util.Map;
 
 public class Main {
 
-	static final String filePath = "example (1).csv";
+	static final String trainingFilePath = "example (1).csv";
+	static final String validationFilePath = "example (1).csv";
 
 	public static void main(String[] args) {
 
-		DataSet dataset = Util.readCSV(filePath);
+		DataSet dataset = Util.readCSV(trainingFilePath);
 		// Util.printDataSet(dataset);
 
 		// System.out.println(dataset.majorityClass);
@@ -20,15 +21,18 @@ public class Main {
 		}
 		Node root = buildTree(dataset, attrList);
 
-		Util.printTree(root);
+		//Util.printTree(root);
 
-		/*List<String[]> validationData = new ArrayList();
-		for (String[] strings : validationData) {
+		DataSet validationData = Util.readCSV(validationFilePath);
+		double count = 0;
+		for (String[] strings : validationData.data) {
 			String result = predict(root, strings);
 			if(result.equalsIgnoreCase(strings[strings.length-1])) {
-				System.out.println("true");
+				count++;
 			}
-		}*/
+		}
+		System.out.println(count/validationData.data.size());
+		
 		//String[] inpRec = {"youth","high","no","fair", "no;"};
 		//System.out.println(predict(root, inpRec));
 		
