@@ -15,14 +15,21 @@ public class Main {
 		// System.out.println(dataset.majorityClass);
 
 		List<Integer> attrList = new ArrayList();
-		for (int i = 0; i < dataset.data.get(0).length; i++) {
+		for (int i = 0; i < dataset.data.get(0).length -1; i++) {
 			attrList.add(i);
 		}
 		Node root = buildTree(dataset, attrList);
 
 		//Util.printTree(root);
 
-		String[] inpRec = {"middle_aged","high","no","fair"};
+		/*List<String[]> validationData = new ArrayList();
+		for (String[] strings : validationData) {
+			String result = predict(root, strings);
+			if(result.equalsIgnoreCase(strings[strings.length-1])) {
+				System.out.println("true");
+			}
+		}*/
+		String[] inpRec = {"youth","high","no","fair", "no;"};
 		System.out.println(predict(root, inpRec));
 		
 	}
@@ -52,7 +59,7 @@ public class Main {
 		curr = attrSelectionMethod(dataset, attrList);
 
 		// make condition here
-		attrList.remove(curr.attr);
+		attrList.remove(Integer.valueOf(curr.attr));
 
 		for (BranchDecision branch : curr.branches) {
 			if (branch.partitionedDataSet.data.isEmpty()) {
@@ -78,8 +85,8 @@ public class Main {
 		Map<String, DataSet> selectedDatasets = null;
 		for (Integer i : attrList) {
 			Map<String, DataSet> djs = new HashMap();
-			if (attrList.indexOf(i) == attrList.size() - 1)
-				break;
+			/*if (attrList.indexOf(i) == attrList.size() - 1)
+				break;*/
 			for (String[] str : dataset.data) {
 
 				if (!djs.containsKey(str[i])) {
