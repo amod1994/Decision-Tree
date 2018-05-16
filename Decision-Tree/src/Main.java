@@ -56,7 +56,7 @@ public class Main {
 			curr = new Node(dataset.majorityClass);
 			return curr;
 		}
-		curr = attrSelectionMethod(dataset, attrList);
+		curr = id3AttributeSelector(dataset, attrList);
 
 		// make condition here
 		attrList.remove(Integer.valueOf(curr.attr));
@@ -72,7 +72,7 @@ public class Main {
 		return curr;
 	}
 
-	private static Node attrSelectionMethod(DataSet dataset, List<Integer> attrList) {
+	private static Node id3AttributeSelector(DataSet dataset, List<Integer> attrList) {
 
 		Double infoD = 0.0;
 		for (String c : dataset.classes.keySet()) {
