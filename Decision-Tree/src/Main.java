@@ -6,12 +6,11 @@ import java.util.Map;
 public class Main {
 	// Attribute DataSet_modified.csv, example (1).csv, Dresses_Attribute_Sales.csv
 	// Attribute DataSet_modified._p.csv, Dresses_Attribute_Sales._p.csv
-	static final String trainingFilePath = "test.csv";
+	static final String trainingFilePath = "Attribute DataSet_modified.csv";
 	static final String validationFilePath = "test.csv";
 	static final String method = "CART"; // ID3, C45, CART
 
 	public static void main(String[] args) {
-		long startTime = System.currentTimeMillis();
 		DataSet dataset = Util.readCSV(trainingFilePath);
 		
 		/*Print Training Dataset*/
@@ -20,17 +19,29 @@ public class Main {
 		/*Print Majority Class*/
 		// System.out.println(dataset.majorityClass);
 
+		long startTime = System.currentTimeMillis();
 		List<Integer> attrList = new ArrayList();
 		for (int i = 0; i < dataset.data.get(0).length - 1; i++) {
 			attrList.add(i);
 		}
 		Node root = buildTree(dataset, attrList);
 
-		System.out.println("Tree Built");
+		long endTime = System.currentTimeMillis();
+		System.out.println("Training Run Time:" + (endTime - startTime));
+		
+		//System.out.println("Tree Built");
 		
 		/*Print Tree*/
 		//Util.printTree(root);
+		
+		startTime = System.currentTimeMillis();
+		validation(root);
+		endTime = System.currentTimeMillis();
+		System.out.println("Validation Run Time:" + (endTime - startTime));
 
+	}
+
+	private static void validation(Node root) {
 		DataSet validationData = Util.readCSV(validationFilePath);
 		double count = 0;
 		for (String[] strings : validationData.data) {
@@ -43,9 +54,6 @@ public class Main {
 			}
 		}
 		System.out.println(count / validationData.data.size());
-		long endTime = System.currentTimeMillis();
-		System.out.println("Running Time:" + (endTime - startTime));
-
 	}
 
 	public static String predict(Node root, String[] inpRecord) {
