@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Main {
 
-	static final String filePath = "test.csv";
+	static final String filePath = "example (1).csv";
 
 	public static void main(String[] args) {
 
@@ -20,7 +20,7 @@ public class Main {
 		}
 		Node root = buildTree(dataset, attrList);
 
-		//Util.printTree(root);
+		Util.printTree(root);
 
 		/*List<String[]> validationData = new ArrayList();
 		for (String[] strings : validationData) {
@@ -29,8 +29,8 @@ public class Main {
 				System.out.println("true");
 			}
 		}*/
-		String[] inpRec = {"youth","high","no","fair", "no;"};
-		System.out.println(predict(root, inpRec));
+		//String[] inpRec = {"youth","high","no","fair", "no;"};
+		//System.out.println(predict(root, inpRec));
 		
 	}
 	
@@ -80,7 +80,12 @@ public class Main {
 			infoD -= temp * (Math.log(temp) / Math.log(2));
 		}
 
-		Double maxGain = Double.MIN_VALUE;
+		/*if(attrList.size() == 1 && attrList.get(0) == 4) {
+			System.out.println();
+		}*/
+		
+		//Double maxGain = Double.MIN_VALUE;
+		Double maxGain = -1.0;
 		int selectedAttr = -1;
 		Map<String, DataSet> selectedDatasets = null;
 		for (Integer i : attrList) {
@@ -119,13 +124,16 @@ public class Main {
 				}
 				infoDA += weight * infoDj;
 			}
-			if (infoD - infoDA > maxGain) {
+			Double gain = (infoD - infoDA);
+			if (gain > maxGain) {
 				maxGain = infoD - infoDA;
 				selectedAttr = i;
 				selectedDatasets = djs;
 			}
 		}
 
+		if(selectedAttr == -1)
+			System.out.println("ERROR");
 		Node result = new Node(selectedAttr);
 		for (Map.Entry<String, DataSet> dj : selectedDatasets.entrySet()) {
 			BranchDecision branch = new BranchDecision();
