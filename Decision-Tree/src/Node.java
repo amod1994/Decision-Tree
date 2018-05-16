@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Node {
 	
-	int attr;
+	int attr = -1;
 	String label;
 	
 	ArrayList<BranchDecision> branches;

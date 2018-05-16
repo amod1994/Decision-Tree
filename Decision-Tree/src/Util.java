@@ -1,10 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
-import java.util.Map.Entry;
 
 public class Util {
 	
@@ -65,4 +63,31 @@ public class Util {
 			}
 		}
 
+		public static void printTree(Node root) {
+			Queue<Node> list = new LinkedList();
+			list.add(root);
+			int curc= root.branches.size();
+			int ncurc = 0;
+			System.out.println(" A:" + root.attr);
+			while (!list.isEmpty()) {
+				Node cur = list.remove();
+				for (BranchDecision branch : cur.branches) {
+					System.out.print(" B:" + branch.equalTo + "->");
+					if(branch.resultant.attr != -1) {
+						System.out.print(" A:" +branch.resultant.attr);
+						list.add(branch.resultant);
+						ncurc += branch.resultant.branches.size();
+					} else
+						System.out.print(" L:" + branch.resultant.label);
+					System.out.print(",");
+					curc--;
+				}
+				System.out.print("||");
+				if(curc == 0) {
+					curc = ncurc;
+					ncurc = 0;
+					System.out.println();
+				}
+			}
+		}
 }
