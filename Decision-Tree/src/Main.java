@@ -4,47 +4,63 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-
-	static final String trainingFilePath = "example (1).csv";
-	static final String validationFilePath = "example (1).csv";
+	// Attribute DataSet_modified.csv, example (1).csv, Dresses_Attribute_Sales.csv
+	// Attribute DataSet_modified._p.csv, Dresses_Attribute_Sales._p.csv
+	static final String trainingFilePath = "test.csv";
+	static final String validationFilePath = "test.csv";
+	static final String method = "CART"; // ID3, C45, CART
 
 	public static void main(String[] args) {
-
+		long startTime = System.currentTimeMillis();
 		DataSet dataset = Util.readCSV(trainingFilePath);
+		
+		/*Print Training Dataset*/
 		// Util.printDataSet(dataset);
 
+		/*Print Majority Class*/
 		// System.out.println(dataset.majorityClass);
 
 		List<Integer> attrList = new ArrayList();
-		for (int i = 0; i < dataset.data.get(0).length -1; i++) {
+		for (int i = 0; i < dataset.data.get(0).length - 1; i++) {
 			attrList.add(i);
 		}
 		Node root = buildTree(dataset, attrList);
 
+		System.out.println("Tree Built");
+		
+		/*Print Tree*/
 		//Util.printTree(root);
 
 		DataSet validationData = Util.readCSV(validationFilePath);
 		double count = 0;
 		for (String[] strings : validationData.data) {
 			String result = predict(root, strings);
-			if(result.equalsIgnoreCase(strings[strings.length-1])) {
+			/*if (null == result) {
+				System.out.println();
+			}*/
+			if (null != result && result.equalsIgnoreCase(strings[strings.length - 1])) {
 				count++;
 			}
 		}
-		System.out.println(count/validationData.data.size());
-		
-		//String[] inpRec = {"youth","high","no","fair", "no;"};
-		//System.out.println(predict(root, inpRec));
-		
+		System.out.println(count / validationData.data.size());
+		long endTime = System.currentTimeMillis();
+		System.out.println("Running Time:" + (endTime - startTime));
+
 	}
-	
+
 	public static String predict(Node root, String[] inpRecord) {
-		if(root.attr == -1) {
+		if (root.attr == -1) {
 			return root.label;
 		}
 		for (BranchDecision branch : root.branches) {
-			if(branch.equalTo.equals(inpRecord[root.attr])) {
-				return predict(branch.resultant, inpRecord);
+			if (null != branch.equalTo) {
+				if (branch.equalTo.equals(inpRecord[root.attr])) {
+					return predict(branch.resultant, inpRecord);
+				}
+			} else {
+				if (branch.attrSet.contains(inpRecord[root.attr])) {
+					return predict(branch.resultant, inpRecord);
+				}
 			}
 		}
 		return null;
@@ -58,17 +74,20 @@ public class Main {
 		if (attrList.isEmpty()) {
 			return new Node(dataset.majorityClass);
 		}
-		
-		curr = ID3.AttributeSelector(dataset, attrList);
-		//curr = C45.AttributeSelector(dataset, attrList);
-		//curr = CART.AttributeSelector(dataset, attrList);
-		
-		/*make condition here-> moved to attrSelection*/
-		//attrList.remove(Integer.valueOf(curr.attr));
+		if (method.equalsIgnoreCase("ID3")) {
+			curr = ID3.AttributeSelector(dataset, attrList);
+		} else if (method.equalsIgnoreCase("C45")) {
+			curr = C45.AttributeSelector(dataset, attrList);
+		} else {
+			curr = CART.AttributeSelector(dataset, attrList);
+		}
 
-		if(curr.attr == -1)
+		/* make condition here-> moved to attrSelection */
+		// attrList.remove(Integer.valueOf(curr.attr));
+
+		if (curr.attr == -1)
 			return new Node(dataset.majorityClass);
-		
+
 		for (BranchDecision branch : curr.branches) {
 			if (branch.partitionedDataSet.data.isEmpty()) {
 				return new Node(dataset.majorityClass);
@@ -78,6 +97,7 @@ public class Main {
 		}
 
 		return curr;
+
 	}
 
 }

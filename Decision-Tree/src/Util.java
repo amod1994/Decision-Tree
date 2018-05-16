@@ -24,9 +24,10 @@ public class Util {
 
 			in = new Scanner(new File(filePath));
 
-			/*
-			 * TODO: IF FIRST ROW IS INFORMATION String str = in.next();
-			 */
+			
+			/*TODO: IF FIRST ROW IS INFORMATION */
+			//String str = in.next();
+			
 
 			double maxCount = Double.MIN_VALUE;
 			while (in.hasNext()) {
