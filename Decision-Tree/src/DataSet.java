@@ -7,6 +7,6 @@ public class DataSet {
 
 	//ArrayList<Attribute> attrs;
 	List<String[]> data = new ArrayList();
-	Map<String, Integer> classes = new HashMap();
-	String majorityClass;
+	Map<String, Double> classes = new HashMap();
+	String majorityClass = null;
 }

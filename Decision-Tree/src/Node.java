@@ -13,7 +13,8 @@ public class Node {
 		this.branches = new ArrayList<>();
 	}
 	
-	Node(){
+	Node(int attr){
+		this.attr = attr;
 		this.branches = new ArrayList<>();
 	}
 	

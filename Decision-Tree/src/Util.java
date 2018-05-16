@@ -22,7 +22,7 @@ public class Util {
 				
 				/*TODO: IF FIRST ROW IS INFORMATION
 				String str = in.next();*/
-				
+				double maxCount = Double.MIN_VALUE;
 				while(in.hasNext()) {
 					//dataset.add(new Attribute());
 					String[] strAttrs = in.next().split(",");
@@ -32,7 +32,11 @@ public class Util {
 					if(dataset.classes.containsKey(c)) {
 						dataset.classes.put(c, dataset.classes.get(c) + 1);
 					} else {
-						dataset.classes.put(c, 1);
+						dataset.classes.put(c, 1.0);
+					}
+					if(dataset.classes.get(c) > maxCount) {
+						maxCount = dataset.classes.get(c);
+						dataset.majorityClass = c;
 					}
 					
 					/*while(dataset.size() < strAttrs.length) {	
@@ -52,5 +56,13 @@ public class Util {
 			return dataset;
 		}
 
+		public static void printDataSet(DataSet dataset) {
+			for (String[] attr : dataset.data) {
+				for (String string : attr) {
+					System.out.print(string + ",");
+				}
+				System.out.println();
+			}
+		}
 
 }
